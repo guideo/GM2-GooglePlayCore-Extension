@@ -7,7 +7,7 @@ Allows you to check against Play Store, if there is an update available for your
 If there is, you can then launch an intent to start the update (only doing IMMEDIATE update at the moment, but you can put it behind your own "popup" before starting it). The intent itself follows Google's Design.
 There are currently only two methods: **playcore_check_for_update()** and **playcore_show_update_prompt()**.
 You MUST run **playcore_check_for_update()** before running **playcore_show_update_prompt()**.
-You can also listen to the async response of **playcore_check_for_update()**, doing (add a Async Social method):
+You can also listen to the async response of **playcore_check_for_update()**, doing (add an Async Social method):
 
     var _id = async_load[? "id"];
     if _id == GooglePlayCore_AsyncEvent {
