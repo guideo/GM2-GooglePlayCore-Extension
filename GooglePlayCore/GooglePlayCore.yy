@@ -19,11 +19,15 @@
     {"filename":"GooglePlayCore.ext","origname":"extensions\\GooglePlayCore.ext","init":"","final":"","kind":4,"uncompress":false,"functions":[
         {"externalName":"playcore_check_for_update","kind":11,"help":"playcore_check_for_update()","hidden":false,"returnType":2,"argCount":0,"args":[],"resourceVersion":"1.0","name":"playcore_check_for_update","tags":[],"resourceType":"GMExtensionFunction",},
         {"externalName":"playcore_show_update_prompt","kind":11,"help":"playcore_show_update_prompt()","hidden":false,"returnType":2,"argCount":0,"args":[],"resourceVersion":"1.0","name":"playcore_show_update_prompt","tags":[],"resourceType":"GMExtensionFunction",},
+        {"externalName":"playcore_check_for_review","kind":11,"help":"playcore_check_for_review()","hidden":false,"returnType":2,"argCount":0,"args":[],"resourceVersion":"1.0","name":"playcore_check_for_review","tags":[],"resourceType":"GMExtensionFunction",},
+        {"externalName":"playcore_show_review_prompt","kind":11,"help":"playcore_show_review_prompt()","hidden":false,"returnType":2,"argCount":0,"args":[],"resourceVersion":"1.0","name":"playcore_show_review_prompt","tags":[],"resourceType":"GMExtensionFunction",},
       ],"constants":[
         {"value":"7001","hidden":false,"resourceVersion":"1.0","name":"GooglePlayCore_AsyncEvent","tags":[],"resourceType":"GMExtensionConstant",},
       ],"ProxyFiles":[],"copyToTargets":8,"order":[
         {"name":"playcore_check_for_update","path":"extensions/GooglePlayCore/GooglePlayCore.yy",},
         {"name":"playcore_show_update_prompt","path":"extensions/GooglePlayCore/GooglePlayCore.yy",},
+        {"name":"playcore_check_for_review","path":"extensions/GooglePlayCore/GooglePlayCore.yy",},
+        {"name":"playcore_show_review_prompt","path":"extensions/GooglePlayCore/GooglePlayCore.yy",},
       ],"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMExtensionFile",},
   ],
   "classname": "",

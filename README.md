@@ -2,10 +2,11 @@
 
 ## This is an extension intended to be used with GameMaker 2
 
-Allows you to check against Play Store, if there is an update available for your game.
+Allows you to check against Play Store, if there is an update available for your game and request it in-game.
+Also allows you to ask for a review, while still in-game.
 
-If there is, you can then launch an intent to start the update (only doing IMMEDIATE update at the moment, but you can put it behind your own "popup" before starting it). The intent itself follows Google's Design.
-There are currently only two methods: **playcore_check_for_update()** and **playcore_show_update_prompt()**.
+If there is an update available, you can launch an intent to start the update (only doing IMMEDIATE update at the moment, but you can put it behind your own "popup" before starting it). The intent itself follows Google's Design.
+There are two methods for an update: **playcore_check_for_update()** and **playcore_show_update_prompt()**.
 You MUST run **playcore_check_for_update()** before running **playcore_show_update_prompt()**.
 You can also listen to the async response of **playcore_check_for_update()**, doing (add an Async Social method):
 
@@ -18,6 +19,8 @@ You can also listen to the async response of **playcore_check_for_update()**, do
             break;
         }
     }
+
+For the review, there are 2 more methods, which are **playcore_check_for_review()** and **playcore_show_review_prompt()**. Again, you must run "check_for_review" first. You can also listen to the async event, changing the **ident** tag to "review_available".
 
 This was developed based on https://developer.android.com/guide/playcore/in-app-updates
 

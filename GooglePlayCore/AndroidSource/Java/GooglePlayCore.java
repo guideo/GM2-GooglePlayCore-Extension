@@ -6,6 +6,8 @@ import com.yoyogames.runner.RunnerJNILib;
 
 import ${YYAndroidPackageName}.R;
 
+
+// App Update
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
@@ -15,6 +17,13 @@ import com.google.android.play.core.tasks.OnSuccessListener;
 import com.google.android.play.core.tasks.Task;
 import android.content.IntentSender;
 
+// App Review
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.OnCompleteListener;
+
+
 import android.util.Log;
 
 public class GooglePlayCore extends OnMethods {
@@ -23,12 +32,15 @@ public class GooglePlayCore extends OnMethods {
     private static final int APP_IMMEDIATE_UPDATE_REQUEST_CODE = 6001;
     private static final int APP_FLEXIBLE_UPDATE_REQUEST_CODE = 6002;
     private static final AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(RunnerActivity.CurrentActivity.getApplicationContext());
-    private AppUpdateInfo mAppImmediateUpdateInfo = null; 
-    private AppUpdateInfo mAppFlexibleUpdateInfo = null; 
+    private AppUpdateInfo mAppImmediateUpdateInfo = null;
+    private AppUpdateInfo mAppFlexibleUpdateInfo = null;
+    
+    private static final ReviewManager reviewManager = ReviewManagerFactory.create(RunnerActivity.CurrentActivity.getApplicationContext());
+    private ReviewInfo mReviewInfo = null;
     
     private static final int EVENT_OTHER_SOCIAL = 70;
     
-    public double playcore_check_for_update() {
+    public void playcore_check_for_update() {
         //Log.d("yoyo_playcore_update_extension", "playcore_check_for_update");
         Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
 
@@ -52,16 +64,39 @@ public class GooglePlayCore extends OnMethods {
                 }
             }
         });
-        return 0;
     }
     
-    public double playcore_show_update_prompt() {
+    public void playcore_show_update_prompt() {
         //Log.d("yoyo_playcore_update_extension", "playcore_show_update_prompt");
         // TODO Adapt to either call immediate or flexible update.
         //  Only immediate update is supported now
         requestImmediateUpdate();
-        return 0;
 	}
+    
+    public void playcore_check_for_review() {
+        Task<ReviewInfo> request = reviewManager.requestReviewFlow();
+        request.addOnCompleteListener(new OnCompleteListener<ReviewInfo>() {
+            @Override
+            public void onComplete(Task<ReviewInfo> task) {
+                if (task.isSuccessful()) {
+                    mReviewInfo = task.getResult();
+                    onReviewAvailable();
+                }
+            }
+        });
+    }
+    
+    public void playcore_show_review_prompt() {
+        Task<Void> flow = reviewManager.launchReviewFlow(RunnerActivity.CurrentActivity, mReviewInfo);
+        flow.addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(Task<Void> task) {
+                // The flow has finished. The API does not indicate whether the user
+                // reviewed or not, or even whether the review dialog was shown. Thus, no
+                // matter the result, we continue our app flow.
+            }
+        });
+    }
     
     public void onUpdateAvailable() {
         //Log.d("yoyo_playcore_update_extension", "onUpdateAvailable");
@@ -104,6 +139,13 @@ public class GooglePlayCore extends OnMethods {
             Log.e("yoyo_playcore_update_extension", "Failed to start flexible update flow");
             e.printStackTrace();
         }
+    }
+    
+    public void onReviewAvailable() {
+        int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+        RunnerJNILib.DsMapAddString(dsMapIndex, "type", "review_available");
+        RunnerJNILib.DsMapAddDouble(dsMapIndex, "id", GooglePlayCore_AsyncEvent);
+        RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
     }
     
     @Override
