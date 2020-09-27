@@ -47,6 +47,11 @@ public class GooglePlayCore extends OnMethods {
         appUpdateInfoTask.addOnSuccessListener(new OnSuccessListener<AppUpdateInfo>() {
             @Override
             public void onSuccess(AppUpdateInfo appUpdateInfo) {
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                    // If update started before, and is now in progress, resume it
+                    mAppImmediateUpdateInfo = appUpdateInfo;
+                    requestImmediateUpdate();
+                }
                 if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE 
                     && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                         mAppImmediateUpdateInfo = appUpdateInfo;
@@ -55,11 +60,7 @@ public class GooglePlayCore extends OnMethods {
                     && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
                         mAppFlexibleUpdateInfo = appUpdateInfo;
                 }
-                if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                    // If update started before, and is now in progress, resume it
-                    mAppImmediateUpdateInfo = appUpdateInfo;
-                    requestImmediateUpdate();
-                } else {
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
                     onUpdateAvailable();
                 }
             }
