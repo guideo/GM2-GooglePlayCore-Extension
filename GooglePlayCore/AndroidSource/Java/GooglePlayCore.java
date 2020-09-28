@@ -95,6 +95,7 @@ public class GooglePlayCore extends OnMethods {
                 // The flow has finished. The API does not indicate whether the user
                 // reviewed or not, or even whether the review dialog was shown. Thus, no
                 // matter the result, we continue our app flow.
+                onReviewCompleted();
             }
         });
     }
@@ -145,6 +146,13 @@ public class GooglePlayCore extends OnMethods {
     public void onReviewAvailable() {
         int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
         RunnerJNILib.DsMapAddString(dsMapIndex, "type", "review_available");
+        RunnerJNILib.DsMapAddDouble(dsMapIndex, "id", GooglePlayCore_AsyncEvent);
+        RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
+    }
+    
+    public void onReviewCompleted() {
+        int dsMapIndex = RunnerJNILib.jCreateDsMap(null, null, null);
+        RunnerJNILib.DsMapAddString(dsMapIndex, "type", "review_completed");
         RunnerJNILib.DsMapAddDouble(dsMapIndex, "id", GooglePlayCore_AsyncEvent);
         RunnerJNILib.CreateAsynEventWithDSMap(dsMapIndex, EVENT_OTHER_SOCIAL);
     }
